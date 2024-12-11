@@ -1,0 +1,85 @@
+<%- include("layouts/head", { pageTitle: 'Login/Sign Up' }) %>
+<body>
+    <%- include("layouts/navbar") %>
+
+        <%- include("layouts/banner", { 'title': 'Login / Sign Up' }) %>
+
+        <div class="container mt-5 mb-5">
+            <% if (typeof message !== "undefined" && message) { %>
+                <div class="alert alert-<%= message.type %> alert-dismissible fade show" role="alert">
+                    <strong><%= message.message %></strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                  </div>
+            <% } %>
+
+            <div class="row gy-5">
+
+                <div class="col-md-6">
+                    <div class="form-section">
+                        <div class="section-title">Login your profile</div>
+                        <form id="loginForm" action="/login" method="post">
+                            <div class="mb-3">
+                                <label for="login_username" class="form-label">Username</label>
+                                <input name="username" type="text" class="form-control" placeholder="Enter Username" id="login_username" required>
+                                <span id="login_username_error"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="login_password" class="form-label">Password</label>
+                                <input name="password" type="password" class="form-control" placeholder="Enter Password" id="login_password" required>
+                                <span id="login_password_error"></span>
+                            </div>
+
+                            <!-- Submit Button -->
+                            <button type="submit" class="btn btn-primary submit-btn">Login</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-section">
+                        <div class="section-title">Sign Up for an account</div>
+                        <form id="signupForm" action="/signup" method="post">
+                            <div class="mb-3">
+                                <label for="username" class="form-label">Username</label>
+                                <input name="username" type="text" class="form-control" placeholder="Enter Username" id="username" required>
+                                <span id="username_error"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="password" class="form-label">Password</label>
+                                <input name="password" type="password" class="form-control" placeholder="Enter Password" id="password" required>
+                                <span id="password_error"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="cPassword" class="form-label">Confirm Password</label>
+                                <input name="cPassword" type="password" class="form-control" placeholder="Re-Enter Password" id="cPassword" required>
+                                <span id="cPassword_error"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="userType" class="form-label">User Type</label>
+                                <select class="form-select" id="userType" name="userType">
+                                    <option disabled selected>Choose...</option>
+                                    <option value="Driver">Driver</option>
+                                    <option value="Admin">Admin</option>
+                                    <option value="Examiner">Examiner</option>
+                                </select>
+                                <span id="userType_error"></span>
+                            </div>
+
+                            <!-- Submit Button -->
+                            <button type="submit" class="btn btn-primary submit-btn">Sign Up</button>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    <%- include("layouts/footer") %>
+    <script src="/helpers/index.js"></script>
+    <script src="/js/authentication.js"></script>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<%- include("layouts/head", { pageTitle: 'Examiner' }) %>
+<body>
+    <%- include("layouts/navbar") %>
+
+        <%- include("layouts/banner", { 'title': 'Examiner' }) %>
+
+        <div class="container mt-5 mb-5">
+            <% if (typeof message !== "undefined" && message) { %>
+                <div class="alert alert-<%= message.type %> alert-dismissible fade show" role="alert">
+                    <strong><%= message.message %></strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                  </div>
+            <% } %>
+
+            <form method="get" action="/examiner" class="d-flex flex-column filter-form">
+                <label for="testType">Filter by Test Type:</label>
+                <div class="mt-2 d-flex align-items-center">
+                    <select name="testType" id="testType">
+                        <option value="">All</option>
+                        <option value="G">G</option>
+                        <option value="G2">G2</option>
+                    </select>
+                    <button type="submit" class="btn btn-primary submit-btn m-0">Filter</button>
+                </div>
+            </form>
+            
+            <% if (drivers?.length) { %>
+                <div class="examiner-driver-container mt-3">
+                    <% drivers.forEach(driver => { %>
+                        <div class="examiner-driver-card">
+                            <h5><%= driver.test_type %>-Test</h5>
+                            <h3><%= driver.first_name %> <%= driver.last_name %> - <%= driver.car_details.make %> <%= driver.car_details.model %></h3>
+                            <form method="post" action="/examiner/<%= driver._id %>">
+                                <div>
+                                    <label for="testResult">Result:</label>
+                                    <select class="form-select" name="testResult" id="testResult" required>
+                                        <option value="">Select...</option>
+                                        <option value="Pass">Pass</option>
+                                        <option value="Fail">Fail</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="comment">Comment:</label>
+                                    <textarea rows="5" name="comment" id="comment" required></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary submit-btn">Update</button>
+                            </form>
+                        </div>
+                    <% }); %>
+                    </div>
+            <% } else { %>
+                <div class="text-center mt-4">
+                    <img src="/assets/images/no-data.png" alt="No data" class="img-fluid mb-4" style="max-width: 150px;">
+                    <h3 class="mb-2">No Data Found</h3>
+                    <p class="lead mb-4">We couldn't find any booked Appointment</p>
+                </div>
+            <% } %>
+        </div>
+</body>
+</html>

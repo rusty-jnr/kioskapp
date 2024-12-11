@@ -1,0 +1,60 @@
+<%- include("layouts/head", { pageTitle: 'Admin Test Listing' }) %>
+<body>
+    <%- include("layouts/navbar") %>
+
+        <%- include("layouts/banner", { 'title': 'Test Listing' }) %>
+
+        <div class="container mt-5 mb-5">
+            <% if (typeof message !== "undefined" && message) { %>
+                <div class="alert alert-<%= message.type %> alert-dismissible fade show" role="alert">
+                    <strong><%= message.message %></strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                  </div>
+            <% } %>
+
+            <form method="get" action="/admin/results" class="d-flex flex-column filter-form">
+                <label for="testStatus">Filter by Test Status:</label>
+                <div class="mt-2 d-flex align-items-center">
+                    <select name="testStatus" id="testStatus">
+                      <option value="">All</option>
+                      <option value="Pass">Pass</option>
+                      <option value="Fail">Fail</option>
+                    </select>
+                    <button type="submit" class="btn btn-primary submit-btn m-0">Filter</button>
+                </div>
+            </form>
+
+            <% if (drivers?.length) { %>
+              <table class="table table-striped table-dark mt-4">
+                <thead>
+                  <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">License Number</th>
+                    <th scope="col">Car Make / Model</th>
+                    <th scope="col">Test Type</th>
+                    <th scope="col">Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% drivers.forEach(driver => { %>
+                    <tr>
+                      <td><%= driver.first_name %> <%= driver.last_name %></td>
+                      <td><%= driver.license_no %></td>
+                      <td><%= driver.car_details.make %> <%= driver.car_details.model %></td>
+                      <td><%= driver.test_type %>-Test</td>
+                      <td style="text-transform: uppercase;"><%= driver.test_status_label || "Pending" %></td>
+                    </tr>
+                  <% }); %>
+                </tbody>
+              </table>
+            <% } else { %>
+              <div class="text-center mt-4">
+                  <img src="/assets/images/no-data.png" alt="No data" class="img-fluid mb-4" style="max-width: 150px;">
+                  <h3 class="mb-2">No Data Found</h3>
+                  <p class="lead mb-4">We couldn't find any booked Appointment</p>
+              </div>
+            <% } %>
+        </div>
+
+</body>
+</html>

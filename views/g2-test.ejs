@@ -1,0 +1,170 @@
+<%- include("layouts/head", { pageTitle: 'G2-test' }) %>
+<body>
+    <%- include("layouts/navbar") %>
+
+        <%- include("layouts/banner", { 'title': 'G2 Driving Test Application' }) %>
+
+        <div class="container mt-5 mb-5">
+            <% if (typeof message !== "undefined" && message) { %>
+                <div class="alert alert-<%= message.type %> alert-dismissible fade show" role="alert">
+                    <strong><%= message.message %></strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                  </div>
+            <% } %>
+
+            <% if (user?.profileComplete) { %>
+                <h2 class="heading-text">Select an Appointment Date</h2>
+                <form class="mb-4" id="availableDateForm" action="/appointments/available" method="post">
+                    <div class="d-flex align-items-center w-50">
+                        <input type="text" name="page" value="G2" hidden>
+                        <input type="date" class="form-control w-50 me-2" id="datePicker" name="date">
+                        <button type="submit" class="btn btn-primary submit-btn m-0">Show Available Time slot(s)</button>
+                    </div>
+                </form>
+            <% } %>
+
+            <% if (typeof slots !== "undefined" && slots) { %>
+                <h4 class="mt-4 heading-text"><%= slots?.title %></h4>
+                <div id="timeSlots" class="mb-4">
+                    <% slots?.slots.forEach((slot) => { %>
+                        <form action="/appointments/book" method="post">
+                            <input type="text" name="page" value="G2" hidden>
+                            <input type="hidden" name="slotId" value="<%= slot._id %>">
+                            <input type="hidden" name="date" value="<%= slot.date %>">
+                            <button
+                                type="submit"
+                                id="availableSlotBtn"
+                                data-id="<%= slot._id %>"
+                                data-date="<%= slot.date %>"
+                                class="btn btn-primary submit-btn"
+                            >
+                                <%= slot.time %>
+                            </button>
+                        </form>
+                    <% }) %>
+                </div>
+            <% } %>
+
+            <% if (user?.test_status) { %>
+                <h3><%=user?.test_type %>-Test Feedback</h3>
+                <table class="table table-striped table-dark mt-4 test-feedback">
+                    <thead>
+                        <tr>
+                            <th scope="col">Comment</th>
+                            <th scope="col">Test Result</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td scope="row"><%=user?.comment || "--/--"%></td>
+                            <td><%=user?.test_status_label === "Pass" ? "Passed" : "Failed" %></td>
+                        </tr>
+                    </tbody>
+                </table>
+            <% } %>
+
+            <% if (typeof info !== "undefined" && info) { %>
+                <p>Upcoming Appointment: <span id="upcoming-appointment"><%= info.upcomingAppointment %></span></p>
+            <% } %>
+
+            <% if (user?.profileComplete) { %>
+                <div class="card">
+                    <div class="card-header text-white">
+                        <h5>Profile Information</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <!-- Personal Information Section -->
+                            <div class="col-md-6 mb-4">
+                                <h6 class="mb-3"><strong>Personal Information</strong></h6>
+                                <p><strong>First Name:</strong> <%= user.first_name %></p>
+                                <p><strong>Last Name:</strong> <%= user.last_name %></p>
+                                <p><strong>License Number:</strong> <%= user.license_no %></p>
+                                <p><strong>Age:</strong> <%= user.age %></p>
+                            </div>
+    
+                            <!-- Car Information Section -->
+                            <div class="col-md-6 mb-4">
+                                <h6 class="mb-3"><strong>Car Information</strong></h6>
+                                <p><strong>Make:</strong> <%= user?.car_details?.make %></p>
+                                <p><strong>Model:</strong> <%= user?.car_details?.model %></p>
+                                <p><strong>Year:</strong> <%= user?.car_details?.year %></p>
+                                <p><strong>Plate Number:</strong> <%= user?.car_details?.platno %></p>
+                            </div>
+                        </div>
+    
+                        <!-- Edit Button -->
+                        <div class="d-flex justify-content-end">
+                            <a href="/g-test" class="btn submit-btn">Edit Car Infomation</a>
+                        </div>
+                    </div>
+                </div>
+            <% } else { %>
+                <div class="row gy-5 justify-content-center">
+                    <!-- Personal Information Section -->
+                    <div class="col-md-6">
+                        <div class="form-section">
+                            <div class="section-title">Personal Information</div>
+                            <form id="g2Form" action="/g2-test/<%= user?._id %>" method="post">
+                                <div class="mb-3">
+                                    <label for="firstName" class="form-label required">First Name</label>
+                                    <input type="text" class="form-control" id="firstName" name="firstName" placeholder="Enter first name" required>
+                                    <span id="firstName_error"></span>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="lastName" class="form-label required">Last Name</label>
+                                    <input type="text" class="form-control" id="lastName" name="lastName" placeholder="Enter last name" required>
+                                    <span id="lastName_error"></span>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="licenseNumber" class="form-label required">License Number</label>
+                                    <input type="text" class="form-control" id="licenseNumber" name="licenseNumber" placeholder="Enter 8-character alphanumeric license number" maxlength="8" required>
+                                    <span id="licenseNumber_error"></span>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="age" class="form-label required">Age</label>
+                                    <input type="number" class="form-control" id="age" name="age" placeholder="Enter your age" required>
+                                    <span id="age_error"></span>
+                                </div>
+                        </div>
+                    </div>
+
+                    <!-- Car Information Section -->
+                    <div class="col-md-6">
+                        <div class="form-section">
+                            <div class="section-title">Car Information</div>
+                                <div class="mb-3">
+                                    <label for="carMake" class="form-label required">Make</label>
+                                    <input type="text" class="form-control" id="carMake" name="carMake" placeholder="Enter car make" required>
+                                    <span id="carMake_error"></span>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="carModel" class="form-label required">Model</label>
+                                    <input type="text" class="form-control" id="carModel" name="carModel" placeholder="Enter car model" required>
+                                    <span id="carModel_error"></span>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="carYear" class="form-label required">Year</label>
+                                    <input type="number" class="form-control" id="carYear" name="carYear" placeholder="Enter car year" required>
+                                    <span id="carYear_error"></span>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="plateNumber" class="form-label required">Plate Number</label>
+                                    <input type="text" class="form-control" id="plateNumber" name="plateNumber" placeholder="Enter car plate number" required>
+                                    <span id="plateNumber_error"></span>
+                                </div>
+                        </div>
+                    </div>
+
+                        <!-- Submit Button -->
+                        <button type="submit" class="btn submit-btn">Submit</button>
+                    </form>
+                </div>
+            <% } %>
+        </div>
+
+    <%- include("layouts/footer") %>
+    <script src="/helpers/index.js"></script>
+    <script src="/js/g2Test_validation.js"></script>
+</body>
+</html>

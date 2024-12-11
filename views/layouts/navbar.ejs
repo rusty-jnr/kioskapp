@@ -1,0 +1,35 @@
+<nav class="navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <img class="logo" src="/assets/images/logo.png" alt="">
+    </a>
+    <div id="navbarNavAltMarkup">
+      <div class="navbar-nav flex-row">
+        <a class="m-2" aria-current="page" href="/">Dashboard</a>
+
+        <% if (user) { %>
+
+          <% if (user?.user_type === "Driver") { %>
+            <a class="m-2" href="/g2-test">G2-Test</a>
+            <a class="m-2" href="/g-test">G-Test</a>
+          <% } %>
+          
+          <% if (user?.user_type === "Admin") { %>
+            <a class="m-2" href="/appointment">Appointment</a>
+            <a class="m-2" href="/admin/results">Test Results</a>
+          <% } %>
+
+          <% if (user?.user_type === "Examiner") { %>
+            <a class="m-2" href="/examiner">Examiner</a>
+          <% } %>
+
+          <a class="m-2" href="/logout">Logout</a>
+
+        <% } else { %>
+          <a class="m-2" href="/login">Login</a>
+        <% } %>
+        
+      </div>
+    </div>
+  </div>
+</nav>
