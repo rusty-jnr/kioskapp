@@ -20,7 +20,8 @@ const port = process.env.PORT || 1010;
 const __filename = fileURLToPath(import.meta.url); // get the resolved path to the file
 const __dirname = path.dirname(__filename); // get the name of the directory
 
-app.use(express.static(__dirname + "/public"));
+// app.use(express.static(__dirname + "/public"));
+app.use(express.static(path.join(__dirname, 'public')));
 app.set("views", __dirname + "/views");
 app.set("view-engine", "ejs");
 
