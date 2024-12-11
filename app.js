@@ -4,6 +4,7 @@ console.log("******** Welcome to the Driving Test ********");
 
 import express from "express";
 import session from "express-session";
+import ejs from 'ejs'
 
 import {} from 'dotenv/config'
 import path from 'path';
