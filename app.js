@@ -21,7 +21,7 @@ const __filename = fileURLToPath(import.meta.url); // get the resolved path to t
 const __dirname = path.dirname(__filename); // get the name of the directory
 
 app.use(express.static("public"));
-// app.set("views", __dirname + "/views");
+app.set("views", __dirname + "/views");
 app.set("view-engine", "ejs");
 
 // To get the form data out of the request body
